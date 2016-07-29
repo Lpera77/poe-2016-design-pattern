@@ -15,7 +15,7 @@ use Interop\Container\ContainerInterface;
 class Router
 {
     private $config = [];
-
+    private $container;
     /**
      * Routeur constructor.
      * @param array $config
@@ -23,6 +23,19 @@ class Router
     public function __construct(array $config, ContainerInterface $container)
     {
         $this->config = $config;
+        $this->container = $container;
+    }
+
+    public function route($service)
+    {
+        $maRoute = $_GET['route'];
+        if(!isset($this->config[$maRoute])){
+            header("HTTP/1.0 404 Not Found");
+        }
+        else{
+           $controller = $this->container->get($this->config[$maRoute]);
+           echo $controller->indexAction();
+        }
     }
 
 
